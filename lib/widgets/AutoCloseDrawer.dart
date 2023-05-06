@@ -33,6 +33,15 @@ class AutoCloseDrawer extends StatelessWidget {
                 Navigator.pop(context);
               },
             ),
+            ListTile(
+              title: Icon(Icons.auto_graph),
+              onTap: () {
+                if (onOptionTapped != null){
+                  onOptionTapped!(2);
+                }
+                Navigator.pop(context);
+              },
+            ),
           ],
         ),
       ),

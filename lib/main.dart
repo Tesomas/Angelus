@@ -1,9 +1,18 @@
+import 'package:angelus/logic/blocs/statistics_bloc/statistics_bloc.dart';
 import 'package:angelus/widgets/AutoCloseDrawer.dart';
-import 'package:angelus/widgets/pages/angelus.dart';
+import 'package:angelus/widgets/angelus_app.dart';
+import 'package:angelus/widgets/pages/angelus_screen/angelus_screen.dart';
+import 'package:angelus/widgets/pages/angelus_screen/statistics_screen/statistics_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedBloc.storage = await HydratedStorage.build(storageDirectory:
+    await getTemporaryDirectory()
+  );
   runApp(const MyApp());
 }
 
@@ -17,7 +26,7 @@ class MyApp extends StatelessWidget {
       title: 'Angelus',
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
       ),
       home: const MyHomePage(),
     );
@@ -36,42 +45,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget page;
-    switch(selectedIndex){
-      case 0:
-        page = PrayerPage();
-        break;
-      case 1:
-       page = Placeholder();
-        break;
-      default:
-        throw UnimplementedError("no widget for $selectedIndex");
-    }
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text("Angelus"),
-            backgroundColor: Theme.of(context).colorScheme.primary,
-          ),
-          drawer: AutoCloseDrawer(width:100, onOptionTapped: onTapped,),
-          body: Row(
-            children: [
-              Expanded(
-                  child: Container(
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                    child: page,
-                )
-              ),
-            ]
-            ),
-          );
-      }
+
+    return MultiBlocProvider(
+
+      providers: [
+        BlocProvider<StatisticsBloc>(create: (context) => StatisticsBloc()),
+
+      ],
+      child: AngelusApp(),
     );
   }
-  void onTapped(int indexTapped){
-    setState(() {
-      selectedIndex = indexTapped;
-  });}
 }
