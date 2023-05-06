@@ -1,6 +1,4 @@
 import 'package:angelus/widgets/pages/angelus_screen/angelus_screen.dart';
-import 'package:angelus/widgets/pages/angelus_screen/statistics_screen/statistics_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,20 +17,7 @@ class _AngelusAppState extends State<AngelusApp> {
 
   @override
   Widget build(BuildContext context) {
-    Widget page;
-    switch (selectedIndex) {
-      case 0:
-        page = AngelusScreen();
-        break;
-      case 1:
-        page = Placeholder();
-        break;
-      case 2:
-        page = StatisticsScreen();
-        break;
-      default:
-        throw UnimplementedError("no widget for $selectedIndex");
-    }
+
     return LayoutBuilder(
         builder: (context, constraints) {
           return Scaffold(
@@ -52,8 +37,8 @@ class _AngelusAppState extends State<AngelusApp> {
                         color: Theme
                             .of(context)
                             .colorScheme
-                            .primaryContainer,
-                        child: page,
+                            .background,
+                        child: AngelusScreen(),
                       )
                   ),
 

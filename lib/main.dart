@@ -22,13 +22,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Angelus',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
+
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<StatisticsBloc>(create: (context)=> StatisticsBloc())
+      ],
+      child: MaterialApp(
+        title: 'Angelus',
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: const ColorScheme.dark()
+        ),
+        home: const AngelusApp(),
       ),
-      home: const MyHomePage(),
     );
   }
 }
@@ -41,7 +47,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {

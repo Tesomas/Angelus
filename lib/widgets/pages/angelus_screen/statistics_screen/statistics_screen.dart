@@ -15,13 +15,22 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<StatisticsBloc, int>(
         builder: (context, state) {
-          return Column(children: [
-            Expanded(child: Text("Prayed ${state} times")),
-            Container(
-                color: Colors.orange,
-                child: ElevatedButton(onPressed: onPressed, child: Text("Reset Prayer Counter")))
-          ]);
-    });
+          return Scaffold(
+              appBar: AppBar(
+                title: Text("Statistics"),
+                backgroundColor: Theme
+                    .of(context)
+                    .colorScheme
+                    .primary,
+              ),
+            body: Column(children: [
+                    Expanded(child: Text("Prayed ${state} times")),
+                    Container(
+                      width: double.infinity,
+                      child: ElevatedButton(onPressed: onPressed, child: Text("Reset Prayer Counter")))
+            ])
+          );
+        });
   }
   onPressed(){
     BlocProvider.of<StatisticsBloc>(context).add(

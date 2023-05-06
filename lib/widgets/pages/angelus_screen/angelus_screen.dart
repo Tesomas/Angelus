@@ -37,8 +37,8 @@ class _AngelusScreenState extends State<AngelusScreen> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: line.leaderLine ?
-                            colorScheme.primary:
-                            colorScheme.inversePrimary
+                            colorScheme.primaryContainer:
+                            colorScheme.secondaryContainer
 
                         ),
                         child: Text(line.text,),
