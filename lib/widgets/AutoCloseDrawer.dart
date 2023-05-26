@@ -29,7 +29,7 @@ class AutoCloseDrawer extends StatelessWidget {
                 if (onOptionTapped != null){
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SettingsScreens())
+                      MaterialPageRoute(builder: (context) => SettingsScreen())
                   );
                 }
               },

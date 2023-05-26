@@ -41,6 +41,9 @@ dependencies:
   hydrated_bloc: ^9.1.0
   path_provider: ^2.0.11
 
+  flutter_local_notifications: ^14.0.0+1
+  rxdart: ^0.27.7
+
 
 
 flutter_launcher_icons:
