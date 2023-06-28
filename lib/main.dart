@@ -1,3 +1,4 @@
+import 'package:angelus/logic/blocs/settings_bloc/settings_bloc.dart';
 import 'package:angelus/logic/blocs/statistics_bloc/statistics_bloc.dart';
 import 'package:angelus/widgets/AutoCloseDrawer.dart';
 import 'package:angelus/widgets/angelus_app.dart';
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider<StatisticsBloc>(create: (context)=> StatisticsBloc())
+        BlocProvider<StatisticsBloc>(create: (context)=> StatisticsBloc()),
+        BlocProvider<SettingsBloc>(create: (context) => SettingsBloc())
       ],
       child: MaterialApp(
         title: 'Angelus',
