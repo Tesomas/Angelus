@@ -1,4 +1,5 @@
 import 'package:angelus/logic/blocs/statistics_bloc/statistics_bloc.dart';
+import 'package:angelus/services/notification_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,6 +34,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         });
   }
   onPressed(){
+    NotificationService().showPrayerNotification();
     BlocProvider.of<StatisticsBloc>(context).add(
       PrayerCounterClearIncrement(),
     );

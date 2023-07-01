@@ -1,5 +1,6 @@
 import 'package:angelus/logic/blocs/settings_bloc/settings_bloc.dart';
 import 'package:angelus/logic/blocs/statistics_bloc/statistics_bloc.dart';
+import 'package:angelus/services/notification_service.dart';
 import 'package:angelus/widgets/AutoCloseDrawer.dart';
 import 'package:angelus/widgets/angelus_app.dart';
 import 'package:angelus/widgets/pages/angelus_screen/angelus_screen.dart';
@@ -14,6 +15,7 @@ Future<void> main() async {
   HydratedBloc.storage = await HydratedStorage.build(storageDirectory:
     await getTemporaryDirectory()
   );
+  await NotificationService().init();
   runApp(const MyApp());
 }
 
