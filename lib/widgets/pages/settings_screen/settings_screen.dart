@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:angelus/logic/blocs/settings_bloc/models/SettingsModel.dart';
 import 'package:angelus/logic/blocs/settings_bloc/settings_bloc.dart';
+import 'package:angelus/widgets/components/notification_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,17 +31,16 @@ class _SettingsScreenState extends State<SettingsScreen>{
                   shrinkWrap: true,
                   itemCount: state.prayerReminders.length,
                   itemBuilder: (context, index) {
-                    return ElevatedButton(
-                        onPressed: () => _selectTime(state, index),
-                        child: Text(state.prayerReminders[index].format(
-                            context)));
-
+                    return NotificationButton(
+                        notificationTime: state.prayerReminders[index],
+                        selectTime: _selectTime
+                    );
                   }
                 ),
                 Container(
                   width: double.infinity,
                   child: ElevatedButton(
-                      onPressed: () =>  _selectTime(state, null), child: const Text("Add Reminder")
+                      onPressed: () =>  _selectTime(null), child: const Text("Add Reminder")
                   ),
                 )
               ],
@@ -51,27 +51,22 @@ class _SettingsScreenState extends State<SettingsScreen>{
     );
   }
 
-  void _selectTime(SettingsModel settingsState, int? index) async {
-    TimeOfDay initTime = TimeOfDay.now();
-    if (index != null){
-      initTime = settingsState.prayerReminders[index];
-    }
-    final TimeOfDay? pickedTime = await showTimePicker(
+  void _selectTime(TimeOfDay? timeOfDay) async {
+    TimeOfDay initTime = timeOfDay ?? TimeOfDay.now();
+
+    await showTimePicker(
         context: context,
         initialTime: initTime
-    );
+    ).then((pickedTime){
+      BlocProvider.of<SettingsBloc>(context).add(
+        AddNotificationEvent(pickedTime!)
+      );
+      setState(() {
 
-    if (index == null){
-      settingsState.prayerReminders.add(pickedTime!);
-    } else{
-      settingsState.prayerReminders[index]=pickedTime!;
+      });
     }
-    BlocProvider.of<SettingsBloc>(context).add(
-      SettingsChangedEvent(settingsState),
     );
-    setState(() {
 
-    });
 
   }
 }

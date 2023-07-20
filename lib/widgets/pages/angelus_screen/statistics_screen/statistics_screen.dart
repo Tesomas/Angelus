@@ -34,7 +34,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         });
   }
   onPressed(){
-    NotificationService().showPrayerNotification();
     BlocProvider.of<StatisticsBloc>(context).add(
       PrayerCounterClearIncrement(),
     );
