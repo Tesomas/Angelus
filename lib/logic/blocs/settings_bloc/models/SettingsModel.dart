@@ -1,8 +1,9 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
-class SettingsModel {
-  List<TimeOfDay> prayerReminders;
+class SettingsModel implements Equatable{
+  final List<TimeOfDay> prayerReminders;
   SettingsModel(this.prayerReminders);
 
   factory SettingsModel.fromJSON(Map<String, dynamic> json){
@@ -26,5 +27,11 @@ class SettingsModel {
           jsonEncode(reminderStrings)
       };
   }
+
+  @override
+  List<Object?> get props => [prayerReminders];
+
+  @override
+  bool? get stringify => true;
 
 }

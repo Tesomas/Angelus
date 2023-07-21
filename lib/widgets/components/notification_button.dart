@@ -6,10 +6,13 @@ class NotificationButton extends StatelessWidget {
   const NotificationButton({
     super.key,
     required this.selectTime,
+    required this.removeTime,
     required this.notificationTime
   }) : super();
 
   final void Function(TimeOfDay timeOfDay) selectTime;
+  final void Function(TimeOfDay timeOfDay) removeTime;
+
   final TimeOfDay notificationTime;
   @override
   Widget build(BuildContext context) {
@@ -36,6 +39,7 @@ class NotificationButton extends StatelessWidget {
                     )
                   ];
                 },
+                  onSelected: popupItemSelected,
                   child: const Icon(Icons.more_vert),
                 )
               ],
@@ -43,5 +47,11 @@ class NotificationButton extends StatelessWidget {
           ],
         )
     );
+  }
+
+  void popupItemSelected(String selected){
+    if (selected == "delete"){
+      removeTime(notificationTime);
+    }
   }
 }

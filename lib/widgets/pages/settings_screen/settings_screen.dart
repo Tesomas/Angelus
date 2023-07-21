@@ -14,7 +14,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen>{
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsBloc, SettingsModel>(
@@ -33,7 +32,8 @@ class _SettingsScreenState extends State<SettingsScreen>{
                   itemBuilder: (context, index) {
                     return NotificationButton(
                         notificationTime: state.prayerReminders[index],
-                        selectTime: _selectTime
+                        selectTime: _selectTime,
+                        removeTime: _removeTime
                     );
                   }
                 ),
@@ -51,6 +51,14 @@ class _SettingsScreenState extends State<SettingsScreen>{
     );
   }
 
+  void _removeTime(TimeOfDay timeOfDay){
+    BlocProvider.of<SettingsBloc>(context).add(
+        RemoveNotificationEvent(timeOfDay)
+    );
+    setState(() {
+
+    });
+  }
   void _selectTime(TimeOfDay? timeOfDay) async {
     TimeOfDay initTime = timeOfDay ?? TimeOfDay.now();
 
@@ -61,12 +69,10 @@ class _SettingsScreenState extends State<SettingsScreen>{
       BlocProvider.of<SettingsBloc>(context).add(
         AddNotificationEvent(pickedTime!)
       );
-      setState(() {
-
-      });
     }
     );
+    setState(() {
 
-
+    });
   }
 }

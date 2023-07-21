@@ -34,10 +34,12 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsModel> {
                   return event.timeOfDay;
                 }
       );
+      NotificationService().showPrayerNotification(_settingsModel!);
       emit(_settingsModel!);
     });
     on<RemoveNotificationEvent>((event, emit){
       _settingsModel?.prayerReminders.remove(event.timeOfDay);
+      NotificationService().showPrayerNotification(_settingsModel!);
       emit(_settingsModel!);
 
       //TODO: find any matching notifications and remove
