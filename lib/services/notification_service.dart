@@ -32,6 +32,7 @@ class NotificationService {
 
   Future<void> showPrayerNotification(SettingsModel settingsModel) async {
     flutterLocalNotificationsPlugin.cancelAll();
+    final List<PendingNotificationRequest> pending = await flutterLocalNotificationsPlugin.pendingNotificationRequests();
     if (settingsModel.prayerReminders.isNotEmpty) {
       AndroidNotificationChannel channel = const AndroidNotificationChannel(
           'prayerReminder', 'Prayer Reminder', description: "Prayer reminder",

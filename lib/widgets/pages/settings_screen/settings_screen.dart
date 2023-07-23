@@ -1,16 +1,15 @@
-import 'dart:ffi';
 
 import 'package:angelus/logic/blocs/settings_bloc/models/SettingsModel.dart';
 import 'package:angelus/logic/blocs/settings_bloc/settings_bloc.dart';
 import 'package:angelus/widgets/components/notification_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
+  const SettingsScreen({super.key});
+
 }
 
 class _SettingsScreenState extends State<SettingsScreen>{
@@ -26,22 +25,33 @@ class _SettingsScreenState extends State<SettingsScreen>{
             padding: const EdgeInsets.all(8.0),
             child: Column (
               children: [
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: state.prayerReminders.length,
-                  itemBuilder: (context, index) {
-                    return NotificationButton(
-                        notificationTime: state.prayerReminders[index],
-                        selectTime: _selectTime,
-                        removeTime: _removeTime
-                    );
-                  }
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: state.prayerReminders.length,
+                    itemBuilder: (context, index) {
+                      return NotificationButton(
+                          notificationTime: state.prayerReminders[index],
+                          selectTime: _selectTime,
+                          removeTime: _removeTime
+                      );
+                    }
+                  ),
                 ),
                 Container(
                   width: double.infinity,
-                  child: ElevatedButton(
-                      onPressed: () =>  _selectTime(null), child: const Text("Add Reminder")
-                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () =>  _selectTime(null), child: const Text("Add Reminder")
+                        ),
+                      ),
+                      ElevatedButton(
+                          onPressed: () =>  _removeAllNotifications(), child: const Text("Clear Reminders")
+                      ),
+                    ]
+                    ),
                 )
               ],
             ),
@@ -55,10 +65,14 @@ class _SettingsScreenState extends State<SettingsScreen>{
     BlocProvider.of<SettingsBloc>(context).add(
         RemoveNotificationEvent(timeOfDay)
     );
-    setState(() {
-
-    });
   }
+
+  void _removeAllNotifications(){
+    BlocProvider.of<SettingsBloc>(context).add(
+        RemoveAllNotificationsEvent()
+    );
+  }
+
   void _selectTime(TimeOfDay? timeOfDay) async {
     TimeOfDay initTime = timeOfDay ?? TimeOfDay.now();
 
@@ -71,8 +85,5 @@ class _SettingsScreenState extends State<SettingsScreen>{
       );
     }
     );
-    setState(() {
-
-    });
   }
 }

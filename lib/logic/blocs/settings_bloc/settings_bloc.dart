@@ -1,3 +1,4 @@
+
 import 'package:angelus/logic/blocs/settings_bloc/models/SettingsModel.dart';
 import 'package:angelus/services/notification_service.dart';
 import 'package:flutter/material.dart';
@@ -19,44 +20,73 @@ class RemoveNotificationEvent extends SettingsEvent{
   RemoveNotificationEvent(this.timeOfDay);
 }
 
+class RemoveAllNotificationsEvent extends SettingsEvent{
+  RemoveAllNotificationsEvent();
+}
 class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsModel> {
-  SettingsModel? _settingsModel;
-  SettingsBloc(): super(SettingsModel([])){
+  SettingsBloc(): super(SettingsModel(const [])){
     on<SettingsChangedEvent>((event, emit){
       NotificationService().showPrayerNotification(event.settings);
       emit(event.settings);
     });
+
     on<AddNotificationEvent>((AddNotificationEvent event, emit){
-      _settingsModel?.prayerReminders.firstWhere(
+
+      final List<TimeOfDay> prayerReminders = [];
+      prayerReminders.addAll(
+          state.prayerReminders);
+
+
+      prayerReminders.firstWhere(
               (TimeOfDay notificationTime) => notificationTime == event.timeOfDay,
               orElse: () {
-                  _settingsModel?.prayerReminders.add(event.timeOfDay);
+                  prayerReminders.add(event.timeOfDay);
                   return event.timeOfDay;
                 }
       );
-      NotificationService().showPrayerNotification(_settingsModel!);
-      emit(_settingsModel!);
-    });
-    on<RemoveNotificationEvent>((event, emit){
-      _settingsModel?.prayerReminders.remove(event.timeOfDay);
-      NotificationService().showPrayerNotification(_settingsModel!);
-      emit(_settingsModel!);
+      sortPrayerReminders(prayerReminders);
+      emit(SettingsModel(prayerReminders));
+      NotificationService().showPrayerNotification(state);
 
-      //TODO: find any matching notifications and remove
+    });
+
+    on<RemoveNotificationEvent>((event, emit){
+      final List<TimeOfDay> prayerReminders = [];
+      prayerReminders.addAll(
+          state.prayerReminders);
+      prayerReminders.remove(event.timeOfDay);
+      sortPrayerReminders(prayerReminders);
+      emit(SettingsModel(prayerReminders));
+      NotificationService().showPrayerNotification(state);
+    });
+
+    on<RemoveAllNotificationsEvent>((event, emit){
+      final List<TimeOfDay> prayerReminders = [];
+      emit(SettingsModel(prayerReminders));
+      NotificationService().showPrayerNotification(state);
     });
   }
 
   @override
   SettingsModel? fromJson(Map<String, dynamic> json) {
-    _settingsModel = SettingsModel.fromJSON(json);
-    return _settingsModel;
+    return SettingsModel.fromJSON(json);
   }
 
   @override
   Map<String, dynamic>? toJson(SettingsModel state) {
     return state.toJSON();
   }
-
+  
+   void sortPrayerReminders(List<TimeOfDay> prayerReminders){
+    prayerReminders.sort((a, b){
+      int hourCompare = a.hour.compareTo(b.hour);
+      if (hourCompare != 0){
+        return hourCompare;
+      } else {
+        return a.minute.compareTo(b.minute);
+      }
+    });
+  }
 
 
 }
